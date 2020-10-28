@@ -14,12 +14,18 @@ set -o errexit
 set -o nounset
 
 # Install dependencies
-pkgs="httpie"
-for pkg in podman kind kubectl make go-lang; do
+pkgs=""
+for pkg in podman kind kubectl make; do
     if ! command -v "$pkg"; then
         pkgs+=" $pkg"
     fi
 done
+if ! command -v go; then
+    pkgs+=" go-lang"
+fi
+if ! command -v http; then
+    pkgs+=" httpie"
+fi
 if [ -n "$pkgs" ]; then
     # NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
     curl -fsSL http://bit.ly/install_pkg | PKG=$pkgs bash
