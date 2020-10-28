@@ -59,7 +59,7 @@ EOF
     sudo chown -R "$USER" "$HOME/.kube/"
 fi
 
-if [ -z "$(sudo podman images electrocucaracha/web:1.0 -q)" ]; then
+if [ -z "$(podman images electrocucaracha/web:1.0 -q)" ] && [ ! -f /tmp/web.tgz ]; then
     podman build -t electrocucaracha/web:1.0 .
     podman image prune --force
     podman save --output /tmp/web.tgz --compress electrocucaracha/web:1.0
