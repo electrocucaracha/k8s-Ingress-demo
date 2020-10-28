@@ -8,6 +8,8 @@ This project was created to demonstrate how to configure and use the
 Controller and the [KinD tool][3] for deploying a multinode Kubernetes
 cluster.
 
+![Dashboard](img/diagram.png)
+
 ## Virtual Machines
 
 The [Vagrant tool][4] can be used for provisioning an Ubuntu Focal
