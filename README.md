@@ -1,5 +1,4 @@
 # Kubernetes Ingress Demo
-[![Build Status](https://travis-ci.org/electrocucaracha/k8s-Ingress-demo.png)](https://travis-ci.org/electrocucaracha/k8s-Ingress-demo)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Summary
@@ -11,9 +10,9 @@ cluster.
 
 ## Virtual Machines
 
-The [Vagrant tool][6] can be used for provisioning a CentOS Virtual
-Machine. It's highly recommended to use the  *setup.sh* script of the
-[bootstrap-vagrant project][7] for installing Vagrant
+The [Vagrant tool][4] can be used for provisioning an Ubuntu Focal
+Virtual Machine. It's highly recommended to use the  *setup.sh* script
+of the [bootstrap-vagrant project][5] for installing Vagrant
 dependencies and plugins required for this project. That script
 supports two Virtualization providers (Libvirt and VirtualBox) which
 are determine by the **PROVIDER** environment variable.
@@ -32,5 +31,5 @@ deployment on it.
 [1]: https://kubernetes.io/docs/concepts/services-networking/ingress/
 [2]: https://kubernetes.github.io/ingress-nginx/
 [3]: https://kind.sigs.k8s.io/
-[6]: https://www.vagrantup.com/
-[7]: https://github.com/electrocucaracha/bootstrap-vagrant
+[4]: https://www.vagrantup.com/
+[5]: https://github.com/electrocucaracha/bootstrap-vagrant

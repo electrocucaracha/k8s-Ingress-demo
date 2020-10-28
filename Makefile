@@ -9,8 +9,8 @@
 
 run-local:
 	go run demo/main.go
-run-docker:
-	docker run -p $$PORT:3000 --hostname container electrocucaracha/web:1.0
+run-container:
+	podman run -p $$PORT:3000 --hostname container electrocucaracha/web:1.0
 run-k8s:
 	kubectl apply -f deployments/
 	kubectl rollout status deployment deployment-es
