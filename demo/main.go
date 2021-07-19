@@ -27,9 +27,12 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch locale := os.Getenv("LOCALE"); {
 	case locale == "es":
-		w.Write([]byte("<h1>Hola CNCF El Salvador desde <b>" + name + "</b> nodo</h1>"))
+		_, err = w.Write([]byte("<h1>Hola CNCF El Salvador desde <b>" + name + "</b> nodo</h1>"))
 	default:
-		w.Write([]byte("<h1>Hello CNCF El Salvador from <b>" + name + "</b> node</h1>"))
+		_, err = w.Write([]byte("<h1>Hello CNCF El Salvador from <b>" + name + "</b> node</h1>"))
+	}
+	if err != nil {
+		panic(err)
 	}
 }
 
@@ -43,5 +46,8 @@ func main() {
 
 	fmt.Println("Starting server at " + port)
 	mux.HandleFunc("/", indexHandler)
-	http.ListenAndServe(":"+port, mux)
+	err := http.ListenAndServe(":"+port, mux)
+	if err != nil {
+		panic("Error: " + err.Error())
+	}
 }

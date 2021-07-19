@@ -20,12 +20,12 @@ dependencies and plugins required for this project. That script
 supports two Virtualization providers (Libvirt and VirtualBox) which
 are determine by the **PROVIDER** environment variable.
 
-    $ curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
+    curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
 
 Once Vagrant is installed, it's possible to provision a Virtual
 Machine using the following instructions:
 
-    $ vagrant up
+    vagrant up
 
 The provisioning process will take some time to install all
 dependencies required by this project and perform a Kubernetes
