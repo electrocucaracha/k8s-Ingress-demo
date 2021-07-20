@@ -8,9 +8,18 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-name: Check End to End deployment
+name: Check End-to-End (On Demand)
 # yamllint disable-line rule:truthy
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - '**.go'
+      - '**.yml'
+      - '**.sh'
+      - '!.github/*'
+  pull_request_review:
+    types:
+      - submitted
 
 jobs:
   check-ci-baremetal:
@@ -19,28 +28,9 @@ jobs:
       DEBUG: true
     steps:
       - uses: actions/checkout@v2
-      - name: Build source code
+      - name: Deploy services
         run: |
           cd scripts
           ./install.sh
           ./deploy.sh
           ./check.sh
-  check-e2e:
-    runs-on: macos-10.15
-    env:
-      VAGRANT_DISABLE_VBOXSYMLINKCREATE: 1
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache Vagrant boxes
-        uses: actions/cache@v2
-        with:
-          path: ~/.vagrant.d/boxes
-          key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
-          restore-keys: |
-            ${{ runner.os }}-vagrant-
-      - name: Replace shorten links
-        run: |
-          find . -type f -not -path ./.github/\* -exec sed -i '.bak' 's|http://bit.ly/install_pkg|https://raw.githubusercontent.com/electrocucaracha/pkg-mgr_scripts/master/install.sh|g' {} \;
-          find . -type f -name "*.bak" -delete
-      - name: Create instance
-        run: vagrant up
