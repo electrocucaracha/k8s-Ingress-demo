@@ -15,7 +15,7 @@ set -o nounset
 
 # Install dependencies
 pkgs=""
-for pkg in podman kind kubectl make; do
+for pkg in docker kind kubectl make; do
     if ! command -v "$pkg"; then
         pkgs+=" $pkg"
     fi
@@ -32,47 +32,19 @@ if [ -n "$pkgs" ]; then
 fi
 
 if ! sudo kind get clusters | grep -q kind; then
-    cat << EOF | sudo kind create cluster --config=-
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-networking:
-  kubeProxyMode: "ipvs"
-nodes:
-  - role: control-plane
-    image: kindest/node:v1.19.1
-    kubeadmConfigPatches:
-      - |
-        kind: InitConfiguration
-        nodeRegistration:
-          kubeletExtraArgs:
-            node-labels: "ingress-ready=true"
-    extraPortMappings:
-      - containerPort: 80
-        hostPort: 80
-        protocol: TCP
-      - containerPort: 443
-        hostPort: 443
-        protocol: TCP
-  - role: worker
-    image: kindest/node:v1.19.1
-  - role: worker
-    image: kindest/node:v1.19.1
-  - role: worker
-    image: kindest/node:v1.19.1
-EOF
+    sudo kind create cluster --config=kind-config.yml
     mkdir -p "$HOME/.kube"
     sudo cp /root/.kube/config "$HOME/.kube/config"
     sudo chown -R "$USER" "$HOME/.kube/"
 fi
 
-if [ -z "$(podman images electrocucaracha/web:1.0 -q)" ] && [ ! -f /tmp/web.tgz ]; then
-    podman build -t electrocucaracha/web:1.0 .
-    podman image prune --force
-    podman save --output /tmp/web.tgz --compress electrocucaracha/web:1.0
+if [ -z "$(sudo docker images electrocucaracha/web:1.0 -q)" ]; then
+    sudo docker build -t electrocucaracha/web:1.0 .
+    sudo docker image prune --force
 fi
 
-sudo kind load image-archive /tmp/web.tgz
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+sudo kind load docker-image electrocucaracha/web:1.0
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
