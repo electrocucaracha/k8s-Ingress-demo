@@ -2,6 +2,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub Super-Linter](https://github.com/electrocucaracha/k8s-Ingress-demo/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 [![End-to-End status](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/on-demand_ci.yml/badge.svg)](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/on-demand_ci.yml)
+![visitors](https://visitor-badge.glitch.me/badge?page_id=electrocucaracha.k8s-Ingress-demo)
 
 ## Summary
 
