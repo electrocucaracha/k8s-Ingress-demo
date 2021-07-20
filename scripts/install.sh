@@ -9,9 +9,12 @@
 ##############################################################################
 
 set -o pipefail
-set -o xtrace
 set -o errexit
 set -o nounset
+if [[ "${DEBUG:-false}" == "true" ]]; then
+    set -o xtrace
+    export PKG_DEBUG=true
+fi
 
 # Install dependencies
 pkgs=""
@@ -31,6 +34,7 @@ if [ -n "$pkgs" ]; then
     curl -fsSL http://bit.ly/install_pkg | PKG=$pkgs bash
 fi
 
+# Provision a K8s cluster
 if ! sudo kind get clusters | grep -q kind; then
     sudo kind create cluster --config=kind-config.yml
     mkdir -p "$HOME/.kube"
@@ -38,19 +42,18 @@ if ! sudo kind get clusters | grep -q kind; then
     sudo chown -R "$USER" "$HOME/.kube/"
 fi
 
+# Build demo website image
 if [ -z "$(sudo docker images electrocucaracha/web:1.0 -q)" ]; then
+    pushd ..
     sudo docker build -t electrocucaracha/web:1.0 .
     sudo docker image prune --force
+    popd
 fi
-
 sudo kind load docker-image electrocucaracha/web:1.0
+
+# Deploy Ingress services
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
     --timeout=90s
-
-if ! grep -q PORT /etc/environment; then
-    echo "export PORT=9001" | sudo tee --append /etc/environment
-fi
-# http localhost:$PORT

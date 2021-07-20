@@ -35,8 +35,12 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision 'shell', privileged: false, inline: <<-SHELL
     set -o errexit
-    cd /vagrant/
-    ./installer.sh | tee ~/installer.log
+    set -o pipefail
+
+    cd /vagrant/scripts
+    ./install.sh | tee ~/install.log
+    ./deploy.sh | tee ~/deploy.log
+    ./check.sh | tee ~/check.log
   SHELL
 
   %i[virtualbox libvirt].each do |provider|
