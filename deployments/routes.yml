@@ -23,7 +23,7 @@ spec:
                 name: service-es
                 port:
                   number: 9001
-          - path: /
+          - path: /en
             pathType: Prefix
             backend:
               service:
