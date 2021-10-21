@@ -19,19 +19,5 @@ fi
 export PKG_KREW_PLUGINS_LIST=" "
 
 # Install dependencies
-pkgs=""
-for pkg in docker kind kubectl make; do
-    if ! command -v "$pkg"; then
-        pkgs+=" $pkg"
-    fi
-done
-if ! command -v go; then
-    pkgs+=" go-lang"
-fi
-if ! command -v http; then
-    pkgs+=" httpie"
-fi
-if [ -n "$pkgs" ]; then
-    # NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
-    curl -fsSL http://bit.ly/install_pkg | PKG=$pkgs bash
-fi
+# NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
+curl -fsSL http://bit.ly/install_pkg | PKG_COMMANDS_LIST="docker,kind,kubectl,make" bash
