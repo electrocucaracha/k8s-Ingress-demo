@@ -33,27 +33,3 @@ if [ -n "$pkgs" ]; then
     # NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
     curl -fsSL http://bit.ly/install_pkg | PKG=$pkgs bash
 fi
-
-# Provision a K8s cluster
-if ! sudo kind get clusters | grep -q kind; then
-    sudo kind create cluster --config=kind-config.yml
-    mkdir -p "$HOME/.kube"
-    sudo cp /root/.kube/config "$HOME/.kube/config"
-    sudo chown -R "$USER" "$HOME/.kube/"
-fi
-
-# Build demo website image
-if [ -z "$(sudo docker images electrocucaracha/web:1.0 -q)" ]; then
-    pushd ..
-    sudo docker build -t electrocucaracha/web:1.0 .
-    sudo docker image prune --force
-    popd
-fi
-sudo kind load docker-image electrocucaracha/web:1.0
-
-# Deploy Ingress services
-kubectl apply -f deploy.yaml
-kubectl wait --namespace ingress-nginx \
-    --for=condition=ready pod \
-    --selector=app.kubernetes.io/component=controller \
-    --timeout=90s

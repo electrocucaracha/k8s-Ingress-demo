@@ -28,9 +28,17 @@ jobs:
       DEBUG: true
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy services
+      - name: Install dependencies
+        run: ./scripts/install.sh
+      - name: Configure k8s cluster
         run: |
           cd scripts
-          ./install.sh
+          ./configure.sh
+      - name: Deploy Ingress app
+        run: |
+          cd scripts
           ./deploy.sh
+      - name: Check Ingress app
+        run: |
+          cd scripts
           ./check.sh

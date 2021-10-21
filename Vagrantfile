@@ -39,6 +39,7 @@ Vagrant.configure("2") do |config|
 
     cd /vagrant/scripts
     ./install.sh | tee ~/install.log
+    ./configure.sh | tee ~/configure.log
     ./deploy.sh | tee ~/deploy.log
     ./check.sh | tee ~/check.log
   SHELL

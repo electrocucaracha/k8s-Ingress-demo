@@ -15,33 +15,9 @@ if [[ "${DEBUG:-false}" == "true" ]]; then
     set -o xtrace
 fi
 
-function info {
-    _print_msg "INFO" "$1"
-}
+# shellcheck source=scripts/_common.sh
+source _common.sh
 
-function error {
-    set +o xtrace
-    _print_msg "ERROR" "$1"
-    printf "CPU usage: "
-    grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage " %"}'
-    printf "Memory free(Kb):"
-    awk -v low="$(grep low /proc/zoneinfo | awk '{k+=$2}END{print k}')" '{a[$1]=$2}  END{ print a["MemFree:"]+a["Active(file):"]+a["Inactive(file):"]+a["SReclaimable:"]-(12*low);}' /proc/meminfo
-    if command -v kubectl; then
-        echo "Kubernetes Events:"
-        kubectl get events -A --sort-by=".metadata.managedFields[0].time"
-        echo "Kubernetes Resources:"
-        kubectl get all -A -o wide
-        echo "Kubernetes Pods:"
-        kubectl describe pods
-        echo "Kubernetes Nodes:"
-        kubectl describe nodes
-    fi
-    exit 1
-}
-
-function _print_msg {
-    echo "$(date +%H:%M:%S) - $1: $2"
-}
 
 function assert_contains {
     local input=$1
