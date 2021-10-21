@@ -13,6 +13,7 @@ set -o errexit
 set -o nounset
 
 last_version=$(curl -sL https://registry.hub.docker.com/v1/repositories/kindest/node/tags | python -c 'import json,sys;versions=[obj["name"][1:] for obj in json.load(sys.stdin) if obj["name"][0] == "v"];print("\n".join(versions))' | sort -rn | head -n 1)
+go_version=$(curl -s https://golang.org/VERSION?m=text | sed 's/go//;s/\..$//')
 
 cat << EOT > scripts/kind-config.yml
 ---
@@ -53,4 +54,5 @@ nodes:
     image: kindest/node:v$last_version
 EOT
 
+sed -i "s/^FROM golang:.*/FROM golang:${go_version}-buster as builder/g" Dockerfile
 wget -O scripts/deploy.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
