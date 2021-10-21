@@ -28,7 +28,7 @@ on:
 
 jobs:
   check-ci-baremetal:
-    name: Check E2E deployment on Ubuntu Bionic Virtual Environment
+    name: Check E2E deployment on Ubuntu Bionic Virtual Environment (contour)
     if: >-
       (
         github.event_name == 'pull_request_review' &&
@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       DEBUG: true
+      INGRESS_CONTROLLER: contour
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies

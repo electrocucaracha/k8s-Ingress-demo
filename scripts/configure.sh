@@ -42,8 +42,19 @@ for node in $(kubectl get node -o jsonpath='{range .items[*]}{.metadata.name}{"\
 done
 
 # Deploy Ingress services
-kubectl apply -f deploy.yaml
-kubectl wait --namespace ingress-nginx \
-    --for=condition=ready pod \
-    --selector=app.kubernetes.io/component=controller \
-    --timeout=90s
+kubectl apply -f "${INGRESS_CONTROLLER:-nginx}.yaml"
+case ${INGRESS_CONTROLLER:-nginx} in
+    nginx)
+        kubectl wait --namespace ingress-nginx \
+        --for=condition=ready pod \
+        --selector=app.kubernetes.io/component=controller \
+        --timeout=90s
+    ;;
+    contour)
+        kubectl patch daemonsets -n projectcontour envoy \
+        -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
+        for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
+            kubectl rollout status --namespace projectcontour "$resource" --timeout=3m
+        done
+    ;;
+esac

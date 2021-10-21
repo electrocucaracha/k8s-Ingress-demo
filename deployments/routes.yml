@@ -13,7 +13,6 @@ kind: Ingress
 metadata:
   name: website-ingress
 spec:
-  ingressClassName: nginx
   rules:
     - http:
         paths:
