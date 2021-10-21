@@ -55,4 +55,5 @@ nodes:
 EOT
 
 sed -i "s/^FROM golang:.*/FROM golang:${go_version}-buster as builder/g" Dockerfile
-wget -O scripts/deploy.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+wget -O scripts/nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+wget -O scripts/contour.yaml https://projectcontour.io/quickstart/contour.yaml

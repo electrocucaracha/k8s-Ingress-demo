@@ -13,4 +13,4 @@ extends: default
 rules:
   line-length: disable
 ignore: |
-  **/scripts/deploy.yaml
+  **/scripts/*.yaml
