@@ -16,6 +16,8 @@ if [[ "${DEBUG:-false}" == "true" ]]; then
     export PKG_DEBUG=true
 fi
 
+export PKG_KREW_PLUGINS_LIST=" "
+
 # Install dependencies
 pkgs=""
 for pkg in docker kind kubectl make; do
