@@ -52,3 +52,5 @@ nodes:
   - role: worker
     image: kindest/node:v$last_version
 EOT
+
+wget -O scripts/deploy.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
