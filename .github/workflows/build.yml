@@ -1,0 +1,74 @@
+---
+# SPDX-license-identifier: Apache-2.0
+##############################################################################
+# Copyright (c) 2021
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
+
+name: Build Docker image
+# yamllint disable-line rule:truthy
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+  pull_request_review:
+    types:
+      - submitted
+    paths:
+      - 'Dockerfile'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Docker image
+    if: >-
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.review.state == 'approved'
+      ) ||
+      github.event_name != 'pull_request_review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and load
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          tags: electrocucaracha/k8s-ingress-demo:latest
+  security:
+    name: Scan Docker image for security vulnerabilities
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan for vulnerabilities
+        id: sec-scan
+        uses: crazy-max/docker-scan-action@master
+        with:
+          image: electrocucaracha/k8s-ingress-demo:latest
+          annotations: true
+      - name: Upload SARIF file
+        if: ${{ steps.sec-scan.outputs.sarif != '' }}
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.sec-scan.outputs.sarif }}
+  licences:
+    name: Scan Docker image for security vulnerabilities
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: philips-labs/tern-action@v1.1.0
+        id: sbom-scan
+        with:
+          image: electrocucaracha/k8s-ingress-demo:latest
+          format: spdxtagvalue
+          output: tern.spdx
+      - uses: actions/upload-artifact@v2
+        with:
+          name: tern
+          path: ${{ steps.sbom-scan.outputs.file }}
