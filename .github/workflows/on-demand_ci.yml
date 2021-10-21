@@ -20,9 +20,21 @@ on:
   pull_request_review:
     types:
       - submitted
+    paths:
+      - '**.go'
+      - '**.yml'
+      - '**.sh'
+      - '!.github/*'
 
 jobs:
   check-ci-baremetal:
+    name: Check E2E deployment on Ubuntu Bionic Virtual Environment
+    if: >-
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.review.state == 'approved'
+      ) ||
+      github.event_name != 'pull_request_review'
     runs-on: ubuntu-20.04
     env:
       DEBUG: true
@@ -42,3 +54,29 @@ jobs:
         run: |
           cd scripts
           ./check.sh
+  check-ci-vml:
+    name: Check E2E deployment on Ubuntu Bionic Virtual Machine
+    if: >-
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.review.state == 'approved'
+      ) ||
+      github.event_name != 'pull_request_review'
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Vagrant boxes
+        uses: actions/cache@v2
+        with:
+          path: ~/.vagrant.d/boxes
+          key: ${{ runner.os }}-vagrant-ubuntu-bionic-${{ hashFiles('Vagrantfile') }}
+          restore-keys: |
+            ${{ runner.os }}-vagrant-ubuntu-bionic-
+      - name: Replace shorten links
+        run: |
+          find . -type f -iname "*sh" -exec sed -i '.bak' 's|http://bit.ly/install_pkg|https://raw.githubusercontent.com/electrocucaracha/pkg-mgr_scripts/master/install.sh|g' {} \;
+          find . -type f -name "*.bak" -delete
+      - name: Deploy Virtual Machine
+        env:
+          VAGRANT_DISABLE_VBOXSYMLINKCREATE: 1
+        run: vagrant up

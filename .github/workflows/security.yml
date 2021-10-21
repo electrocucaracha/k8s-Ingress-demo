@@ -17,9 +17,18 @@ on:
   pull_request_review:
     types:
       - submitted
+    paths:
+      - '**.go'
 
 jobs:
   check-sec:
+    name: Check source code vulnerabilities
+    if: >-
+      (
+        github.event_name == 'pull_request_review' &&
+        github.event.review.state == 'approved'
+      ) ||
+      github.event_name != 'pull_request_review'
     runs-on: ubuntu-20.04
     env:
       GO111MODULE: "on"
