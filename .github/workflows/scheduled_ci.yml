@@ -28,6 +28,11 @@ jobs:
           key: ${{ runner.os }}-vagrant-${{ hashFiles('Vagrantfile') }}
           restore-keys: |
             ${{ runner.os }}-vagrant-
+      # TODO: Remove this once https://www.virtualbox.org/ticket/20636 is released
+      - name: Apply workaround for VBoxHeadless in macOS
+        run: |
+          find . -type f -iname "Vagrantfile" -exec sed -i '.bak' 's|v.gui = .*|v.gui = true|g' {} \;
+          find . -type f -name "*.bak" -delete
       - name: Replace shorten links
         run: |
           find . -type f -not -path ./.github/\* -exec sed -i '.bak' 's|http://bit.ly/install_pkg|https://raw.githubusercontent.com/electrocucaracha/pkg-mgr_scripts/master/install.sh|g' {} \;
