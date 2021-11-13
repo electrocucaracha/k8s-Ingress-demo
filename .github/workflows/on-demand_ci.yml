@@ -55,8 +55,8 @@ jobs:
         run: |
           cd scripts
           ./check.sh
-  check-ci-vml:
-    name: Check E2E deployment on Ubuntu Bionic Virtual Machine
+  check-ci-vm:
+    name: Check E2E deployment on Ubuntu Bionic Virtual Machine (nginx)
     if: >-
       (
         github.event_name == 'pull_request_review' &&
