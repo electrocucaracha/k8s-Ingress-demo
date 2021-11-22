@@ -14,7 +14,7 @@ networking:
   kubeProxyMode: "ipvs"
 nodes:
   - role: control-plane
-    image: kindest/node:v1.22.2
+    image: kindest/node:v1.22.4
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration
@@ -29,8 +29,8 @@ nodes:
         hostPort: 443
         protocol: TCP
   - role: worker
-    image: kindest/node:v1.22.2
+    image: kindest/node:v1.22.4
   - role: worker
-    image: kindest/node:v1.22.2
+    image: kindest/node:v1.22.4
   - role: worker
-    image: kindest/node:v1.22.2
+    image: kindest/node:v1.22.4
