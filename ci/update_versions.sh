@@ -11,9 +11,12 @@
 set -o pipefail
 set -o errexit
 set -o nounset
+if [[ "${DEBUG:-false}" == "true" ]]; then
+    set -o xtrace
+fi
 
 last_version=$(curl -sL https://registry.hub.docker.com/v1/repositories/kindest/node/tags | python -c 'import json,sys;versions=[obj["name"][1:] for obj in json.load(sys.stdin) if obj["name"][0] == "v"];print("\n".join(versions))' | sort -rn | head -n 1)
-go_version=$(curl -s https://golang.org/VERSION?m=text | sed 's/go//;s/\..$//')
+go_version=$(curl -sL https://golang.org/VERSION?m=text | sed 's/go//;s/\..$//')
 
 cat << EOT > scripts/kind-config.yml
 ---
