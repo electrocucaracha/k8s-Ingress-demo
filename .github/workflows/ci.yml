@@ -8,7 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-name: Check End-to-End (On Demand)
+name: Check End-to-End
 # yamllint disable-line rule:truthy
 on:
   push:
@@ -25,6 +25,8 @@ on:
       - '**.yml'
       - '**.sh'
       - '!.github/*'
+  schedule:
+    - cron: '0 0 * * 5'
 
 jobs:
   check-ci-baremetal:
@@ -63,7 +65,7 @@ jobs:
         github.event.review.state == 'approved'
       ) ||
       github.event_name != 'pull_request_review'
-    runs-on: macos-10.15
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
       - name: Cache Vagrant boxes
@@ -84,6 +86,8 @@ jobs:
         run: |
           find . -type f -iname "*sh" -exec sed -i '.bak' 's|http://bit.ly/install_pkg|https://raw.githubusercontent.com/electrocucaracha/pkg-mgr_scripts/master/install.sh|g' {} \;
           find . -type f -name "*.bak" -delete
+      - name: Install vagrant tool
+        run: brew install vagrant
       - name: Deploy Virtual Machine
         env:
           VAGRANT_DISABLE_VBOXSYMLINKCREATE: 1
