@@ -13,4 +13,5 @@ extends: default
 rules:
   line-length: disable
 ignore: |
-  **/scripts/*.yaml
+  **/contour.yaml
+  **/nginx.yaml
