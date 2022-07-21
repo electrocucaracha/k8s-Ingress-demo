@@ -20,4 +20,4 @@ export PKG_KREW_PLUGINS_LIST=" "
 
 # Install dependencies
 # NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
-curl -fsSL http://bit.ly/install_pkg | PKG_COMMANDS_LIST="docker,kind,kubectl,make" bash
+curl -fsSL http://bit.ly/install_pkg | PKG_COMMANDS_LIST="pip,docker,kind,kubectl,make" bash
