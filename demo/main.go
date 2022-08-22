@@ -14,9 +14,11 @@ limitations under the License.
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,8 +48,18 @@ func main() {
 
 	fmt.Println("Starting server at " + port)
 	mux.HandleFunc("/", indexHandler)
-	err := http.ListenAndServe(":"+port, mux)
-	if err != nil {
-		panic("Error: " + err.Error())
+	srv := &http.Server{
+		Addr:              ":" + port,
+		Handler:           mux,
+		ReadTimeout:       5 * time.Second,
+		ReadHeaderTimeout: 5 * time.Second,
+		WriteTimeout:      10 * time.Second,
+	}
+	err := srv.ListenAndServe()
+	if errors.Is(err, http.ErrServerClosed) {
+		fmt.Printf("server closed\n")
+	} else if err != nil {
+		fmt.Printf("error starting server: %s\n", err)
+		os.Exit(1)
 	}
 }
