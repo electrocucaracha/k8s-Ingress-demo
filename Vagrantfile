@@ -29,7 +29,6 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox
 
   config.vm.box = "generic/ubuntu2004"
-  config.vm.box_version = "3.5.0"
   config.vm.box_check_update = false
   config.vm.synced_folder './', '/vagrant'
   config.vm.hostname = "labserver"
@@ -37,6 +36,11 @@ Vagrant.configure("2") do |config|
   config.vm.provision 'shell', privileged: false, inline: <<-SHELL
     set -o errexit
     set -o pipefail
+
+    if [ -f /etc/netplan/01-netcfg.yaml ]; then
+        sudo sed -i "s/addresses: .*/addresses: [1.1.1.1, 8.8.8.8, 8.8.4.4]/g" /etc/netplan/01-netcfg.yaml
+        sudo netplan apply
+    fi
 
     cd /vagrant/scripts
     ./install.sh | tee ~/install.log
@@ -67,7 +71,8 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :libvirt do |v, override|
-    override.vm.synced_folder './', '/vagrant', type: 'nfs'
+    override.vm.synced_folder './', '/vagrant', type: 'virtiofs'
+    v.memorybacking :access, :mode => "shared"
     v.random_hostname = true
     v.management_network_address = '10.0.2.0/24'
     v.management_network_name = 'administration'
