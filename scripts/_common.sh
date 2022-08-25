@@ -11,7 +11,7 @@
 set -o pipefail
 set -o errexit
 set -o nounset
-if [[ "${DEBUG:-false}" == "true" ]]; then
+if [[ ${DEBUG:-false} == "true" ]]; then
     set -o xtrace
 fi
 
@@ -31,7 +31,6 @@ function _print_msg {
     echo "$(date +%H:%M:%S) - $1: $2"
 }
 
-
 # get_status() - Print the current status of the cluster
 function get_status {
     set +o xtrace
@@ -39,7 +38,7 @@ function get_status {
     grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage " %"}'
     printf "Memory free(Kb):"
     awk -v low="$(grep low /proc/zoneinfo | awk '{k+=$2}END{print k}')" '{a[$1]=$2}  END{ print a["MemFree:"]+a["Active(file):"]+a["Inactive(file):"]+a["SReclaimable:"]-(12*low);}' /proc/meminfo
-    if [[ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]]; then
+    if [[ ${INGRESS_CONTROLLER:-nginx} == "nginx" ]]; then
         echo "Kubernetes Events (ingress-nginx):"
         kubectl get events -n ingress-nginx --sort-by=".metadata.managedFields[0].time"
         echo "Kubernetes Resources (ingress-nginx):"

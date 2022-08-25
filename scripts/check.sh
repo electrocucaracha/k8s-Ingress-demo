@@ -11,13 +11,12 @@
 set -o pipefail
 set -o errexit
 set -o nounset
-if [[ "${DEBUG:-false}" == "true" ]]; then
+if [[ ${DEBUG:-false} == "true" ]]; then
     set -o xtrace
 fi
 
 # shellcheck source=scripts/_common.sh
 source _common.sh
-
 
 function assert_contains {
     local input=$1

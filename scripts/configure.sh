@@ -11,7 +11,7 @@
 set -o pipefail
 set -o errexit
 set -o nounset
-if [[ "${DEBUG:-false}" == "true" ]]; then
+if [[ ${DEBUG:-false} == "true" ]]; then
     set -o xtrace
 fi
 
@@ -27,7 +27,7 @@ fi
 
 # Provision a K8s cluster
 if ! sudo "$(command -v kind)" get clusters | grep -e k8s; then
-    cat << EOF | sudo kind create cluster --name k8s --config=-
+    cat <<EOF | sudo kind create cluster --name k8s --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
@@ -78,17 +78,17 @@ done
 # Deploy Ingress services
 kubectl apply -f "${INGRESS_CONTROLLER:-nginx}.yaml"
 case ${INGRESS_CONTROLLER:-nginx} in
-    nginx)
-        kubectl wait --namespace ingress-nginx \
+nginx)
+    kubectl wait --namespace ingress-nginx \
         --for=condition=ready pod \
         --selector=app.kubernetes.io/component=controller \
         --timeout=90s
     ;;
-    contour)
-        kubectl patch daemonsets -n projectcontour envoy \
+contour)
+    kubectl patch daemonsets -n projectcontour envoy \
         -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
-        for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
-            kubectl rollout status --namespace projectcontour "$resource" --timeout=3m
-        done
+    for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
+        kubectl rollout status --namespace projectcontour "$resource" --timeout=3m
+    done
     ;;
 esac
