@@ -22,7 +22,7 @@ trap get_status ERR
 
 kube_version="1.23.5"
 if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
-    kube_version=$(curl -sL https://registry.hub.docker.com/v1/repositories/kindest/node/tags | python -c 'import json,sys;versions=[obj["name"][1:] for obj in json.load(sys.stdin) if obj["name"][0] == "v"];print("\n".join(versions))' | sort -rn | head -n 1)
+    kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
 fi
 
 # Provision a K8s cluster
