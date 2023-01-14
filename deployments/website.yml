@@ -1,7 +1,7 @@
 ---
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
-# Copyright (c)
+# Copyright (c) 2023
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
 # which accompanies this distribution, and is available at
@@ -26,7 +26,30 @@ spec:
     spec:
       containers:
         - name: server
-          image: electrocucaracha/web:1.0
+          image: ko://demo/main.go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-es
+  labels:
+    app: frontend-es
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend-es
+  template:
+    metadata:
+      labels:
+        app: frontend-es
+    spec:
+      containers:
+        - name: server-es
+          image: ko://demo/main.go
+          env:
+            - name: LOCALE
+              value: es
 ---
 apiVersion: v1
 kind: Service
@@ -41,3 +64,40 @@ spec:
       targetPort: 3000
   selector:
     app: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-es
+  labels:
+    app: frontend-es
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9001
+      targetPort: 3000
+  selector:
+    app: frontend-es
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: website-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /es
+            pathType: Prefix
+            backend:
+              service:
+                name: service-es
+                port:
+                  number: 9001
+          - path: /en
+            pathType: Prefix
+            backend:
+              service:
+                name: service-default
+                port:
+                  number: 9001

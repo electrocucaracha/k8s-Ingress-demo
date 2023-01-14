@@ -29,28 +29,17 @@ jobs:
       ) ||
       github.event_name != 'pull_request_review'
     runs-on: ubuntu-latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build and load
-        uses: docker/build-push-action@v3
+      - uses: actions/setup-go@v2
         with:
-          context: .
-          push: true
-          tags: localhost:5000/electrocucaracha/k8s-ingress-demo:latest
+          go-version: 1.18
+      - uses: imjasonh/setup-ko@v0.6
+      - run: ko build demo/main.go --local --bare
       - name: Scan for vulnerabilities
         id: sec-scan
-        uses: crazy-max/docker-scan-action@master
+        uses: crazy-max/ghaction-container-scan@v2
         with:
-          image: localhost:5000/electrocucaracha/k8s-ingress-demo:latest
+          image: ko.local:latest
           annotations: true
-      - name: Upload SARIF file
-        if: ${{ steps.sec-scan.outputs.sarif != '' }}
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: ${{ steps.sec-scan.outputs.sarif }}
