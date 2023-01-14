@@ -15,7 +15,5 @@ if [[ ${DEBUG:-false} == "true" ]]; then
     set -o xtrace
 fi
 
-go_version=$(curl -sL https://golang.org/VERSION?m=text | sed 's/go//;s/\..$//')
-sed -i "s/^FROM golang:.*/FROM golang:${go_version}-buster as builder/g" Dockerfile
 wget -O scripts/nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 wget -O scripts/contour.yaml https://projectcontour.io/quickstart/contour.yaml

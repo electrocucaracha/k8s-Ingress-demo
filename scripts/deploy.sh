@@ -28,7 +28,13 @@ function _print_stats {
 
 trap _print_stats ERR
 
-kubectl apply -f ../deployments/
+newgrp docker <<EONG
+# shellcheck disable=SC1091
+[ -f /etc/profile.d/path.sh ] && source /etc/profile.d/path.sh
+pushd .. >/dev/null
+KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f deployments/website.yml
+popd >/dev/null
+EONG
 
 kubectl rollout status deployment/deployment-es --timeout=3m
 kubectl rollout status deployment/deployment-default --timeout=3m
@@ -45,4 +51,5 @@ if [[ ${INGRESS_CONTROLLER:-nginx} == "nginx" ]]; then
         sleep $((attempt_counter * 10))
     done
 fi
+# TODO: Investigate the issues related to this
 sleep 30

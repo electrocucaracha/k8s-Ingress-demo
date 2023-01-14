@@ -20,4 +20,8 @@ export PKG_KREW_PLUGINS_LIST=" "
 
 # Install dependencies
 # NOTE: Shorten link -> https://github.com/electrocucaracha/pkg-mgr_scripts
-curl -fsSL http://bit.ly/install_pkg | PKG_COMMANDS_LIST="pip,docker,kind,kubectl,make" bash
+curl -fsSL http://bit.ly/install_pkg | PKG_COMMANDS_LIST="pip,docker,kind,kubectl,make" PKG=go-lang bash
+
+# shellcheck disable=SC1091
+[ -f /etc/profile.d/path.sh ] && source /etc/profile.d/path.sh
+go install github.com/google/ko@latest

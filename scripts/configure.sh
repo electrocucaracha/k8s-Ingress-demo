@@ -20,14 +20,17 @@ source _common.sh
 
 trap get_status ERR
 
+# NOTE: this env var is used by kind and ko tools
+export KIND_CLUSTER_NAME=k8s
+
 kube_version="1.23.5"
 if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
     kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
 fi
 
 # Provision a K8s cluster
-if ! sudo "$(command -v kind)" get clusters | grep -e k8s; then
-    cat <<EOF | sudo kind create cluster --name k8s --config=-
+if ! sudo "$(command -v kind)" get clusters | grep -e "$KIND_CLUSTER_NAME"; then
+    cat <<EOF | sudo -E kind create cluster --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
@@ -56,19 +59,9 @@ nodes:
     image: kindest/node:v$kube_version
 EOF
     mkdir -p "$HOME/.kube"
-    sudo cp /root/.kube/config "$HOME/.kube/config"
-    sudo chown -R "$USER" "$HOME/.kube/"
-    chmod 600 "$HOME/.kube/config"
+    sudo chown -R "$USER": "$HOME/.kube"
+    sudo -E kind get kubeconfig | tee "$HOME/.kube/config"
 fi
-
-# Build demo website image
-if [ -z "$(sudo docker images electrocucaracha/web:1.0 -q)" ]; then
-    pushd ..
-    sudo docker build -t electrocucaracha/web:1.0 .
-    sudo docker image prune --force
-    popd
-fi
-sudo kind load docker-image --name k8s electrocucaracha/web:1.0
 
 # Wait for node readiness
 for node in $(kubectl get node -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'); do

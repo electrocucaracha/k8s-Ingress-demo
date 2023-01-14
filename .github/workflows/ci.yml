@@ -41,17 +41,14 @@ jobs:
       - name: Install dependencies
         run: ./scripts/install.sh
       - name: Configure k8s cluster
-        run: |
-          cd scripts
-          ./configure.sh
+        working-directory: scripts
+        run: ./configure.sh
       - name: Deploy Ingress app
-        run: |
-          cd scripts
-          ./deploy.sh
+        working-directory: scripts
+        run: ./deploy.sh
       - name: Check Ingress app
-        run: |
-          cd scripts
-          ./check.sh
+        working-directory: scripts
+        run: ./check.sh
   check-ci-vm:
     name: Check E2E deployment on Ubuntu Bionic Virtual Machine (nginx)
     if: >-
