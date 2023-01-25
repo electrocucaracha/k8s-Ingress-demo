@@ -31,15 +31,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+        uses: actions/checkout@v3.3.0
+      - uses: actions/setup-go@v3.5.0
         with:
           go-version: 1.18
       - uses: imjasonh/setup-ko@v0.6
       - run: ko build demo/main.go --local --bare
       - name: Scan for vulnerabilities
         id: sec-scan
-        uses: crazy-max/ghaction-container-scan@v2
+        uses: crazy-max/ghaction-container-scan@v2.0.0
         with:
           image: ko.local:latest
           annotations: true
