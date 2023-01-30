@@ -31,6 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: /
           VALIDATE_KUBERNETES_KUBEVAL: false
+          KUBERNETES_KUBECONFORM_OPTIONS: '-ignore-missing-schemas'
   check-tox:
     name: Check syntax (tox)
     runs-on: ubuntu-latest
