@@ -18,19 +18,15 @@ fi
 # shellcheck source=scripts/_common.sh
 source _common.sh
 
-trap get_status ERR
+function _gen_kind_config {
+    local num_worker_nodes=3
 
-# NOTE: this env var is used by kind and ko tools
-export KIND_CLUSTER_NAME=k8s
+    kube_version="1.23.5"
+    if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
+        kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
+    fi
 
-kube_version="1.23.5"
-if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
-    kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
-fi
-
-# Provision a K8s cluster
-if ! sudo "$(command -v kind)" get clusters | grep -e "$KIND_CLUSTER_NAME"; then
-    cat <<EOF | sudo -E kind create cluster --config=-
+    cat <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
@@ -51,13 +47,24 @@ nodes:
       - containerPort: 443
         hostPort: 443
         protocol: TCP
-  - role: worker
-    image: kindest/node:v$kube_version
-  - role: worker
-    image: kindest/node:v$kube_version
+EOF
+
+    for ((i = 0; i < num_worker_nodes; i++)); do
+        cat <<EOF
   - role: worker
     image: kindest/node:v$kube_version
 EOF
+    done
+}
+
+trap get_status ERR
+
+# NOTE: this env var is used by kind and ko tools
+export KIND_CLUSTER_NAME=k8s
+
+# Provision a K8s cluster
+if ! sudo "$(command -v kind)" get clusters | grep -e "$KIND_CLUSTER_NAME"; then
+    _gen_kind_config | sudo -E kind create cluster --config=-
     mkdir -p "$HOME/.kube"
     sudo chown -R "$USER": "$HOME/.kube"
     sudo -E kind get kubeconfig | tee "$HOME/.kube/config"
