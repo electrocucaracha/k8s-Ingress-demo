@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, _ *http.Request) {
 	name, err := os.Hostname()
 	if err != nil {
 		panic(err)
