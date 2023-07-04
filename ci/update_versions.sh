@@ -17,3 +17,9 @@ fi
 
 wget -O scripts/nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 wget -O scripts/contour.yaml https://projectcontour.io/quickstart/contour.yaml
+
+if command -v go >/dev/null; then
+    rm go.*
+    go mod init github.com/electrocucaracha/k8s-Ingress-demo
+    go mod tidy -go="$(curl -sL https://golang.org/VERSION?m=text | sed 's/go//;s/\..$//')"
+fi
