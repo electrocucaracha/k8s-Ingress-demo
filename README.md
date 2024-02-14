@@ -4,6 +4,7 @@
 [![GitHub Super-Linter](https://github.com/electrocucaracha/k8s-Ingress-demo/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
 [![End-to-End status](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/ci.yml)
+<!-- markdown-link-check-disable-next-line -->
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=electrocucaracha.k8s-Ingress-demo)
 
 ## Summary
