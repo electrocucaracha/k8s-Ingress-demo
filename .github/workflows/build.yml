@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-go@v5.0.1
         with:
           go-version-file: 'go.mod'
-      - uses: ko-build/setup-ko@v0.6
+      - uses: ko-build/setup-ko@v0.7
         env:
           KO_DOCKER_REPO: ko.local
       - run: ko build demo/main.go --bare
