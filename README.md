@@ -1,10 +1,14 @@
 # Kubernetes Ingress Demo
+
 <!-- markdown-link-check-disable-next-line -->
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub Super-Linter](https://github.com/electrocucaracha/k8s-Ingress-demo/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
 [![End-to-End status](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/electrocucaracha/k8s-Ingress-demo/actions/workflows/ci.yml)
+
 <!-- markdown-link-check-disable-next-line -->
+
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=electrocucaracha.k8s-Ingress-demo)
 
 ## Summary
@@ -19,7 +23,7 @@ cluster.
 ## Virtual Machines
 
 The [Vagrant tool][5] can be used for provisioning an Ubuntu Focal
-Virtual Machine. It's highly recommended to use the  *setup.sh* script
+Virtual Machine. It's highly recommended to use the _setup.sh_ script
 of the [bootstrap-vagrant project][6] for installing Vagrant
 dependencies and plugins required for this project. That script
 supports two Virtualization providers (Libvirt and VirtualBox) which
@@ -39,7 +43,7 @@ deployment on it.
 ### Environment variables
 
 | Name               | Description                                                |
-|:-------------------|:-----------------------------------------------------------|
+| :----------------- | :--------------------------------------------------------- |
 | DEBUG              | Enable verbose output during the execution.(Boolean value) |
 | INGRESS_CONTROLLER | Determine the Ingress Controller to be used.(String value) |
 

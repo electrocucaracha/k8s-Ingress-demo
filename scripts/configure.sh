@@ -21,10 +21,10 @@ source _common.sh
 function _gen_kind_config {
     local num_worker_nodes=3
 
-    kube_version="1.23.5"
-    if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
-        kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
-    fi
+    #kube_version="1.23.5"
+    #if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
+    kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
+    #fi
 
     cat <<EOF
 kind: Cluster

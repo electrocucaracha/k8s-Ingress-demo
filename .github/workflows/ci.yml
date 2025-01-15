@@ -1,4 +1,3 @@
----
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
 # Copyright (c) 2021
@@ -7,31 +6,25 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
 name: Check End-to-End
 # yamllint disable-line rule:truthy
 on:
   push:
     paths:
-      - '**.go'
-      - '**.yml'
-      - '**.sh'
-      - '!.github/*'
+      - "**.go"
+      - "**.yml"
+      - "**.sh"
+      - "!.github/*"
   pull_request_review:
     types:
       - submitted
   schedule:
-    - cron: '0 0 * * 5'
-
+    - cron: "0 0 * * 5"
 jobs:
   check-ci-baremetal:
     name: Check E2E deployment on Ubuntu Bionic Virtual Environment (contour)
     if: >-
-      (
-        github.event_name == 'pull_request_review' &&
-        github.event.review.state == 'approved'
-      ) ||
-      github.event_name != 'pull_request_review'
+      ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: ubuntu-20.04
     env:
       DEBUG: true
@@ -52,11 +45,7 @@ jobs:
   check-ci-vm:
     name: Check E2E deployment on Ubuntu Bionic Virtual Machine (nginx)
     if: >-
-      (
-        github.event_name == 'pull_request_review' &&
-        github.event.review.state == 'approved'
-      ) ||
-      github.event_name != 'pull_request_review'
+      ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: vm-self-hosted
     steps:
       - uses: actions/checkout@v4.2.2

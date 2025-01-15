@@ -1,5 +1,3 @@
 {
-  "ignore": [
-    "./scripts/deploy.yaml"
-  ]
+  "ignore": ["./scripts/deploy.yaml"]
 }

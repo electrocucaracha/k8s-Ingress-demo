@@ -1,4 +1,3 @@
----
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
 # Copyright (c) 2021
@@ -7,7 +6,6 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
 name: Build Docker image
 # yamllint disable-line rule:truthy
 on:
@@ -15,23 +13,18 @@ on:
     types:
       - submitted
   workflow_dispatch:
-
 jobs:
   build:
     name: Build Docker image
     if: >-
-      (
-        github.event_name == 'pull_request_review' &&
-        github.event.review.state == 'approved'
-      ) ||
-      github.event_name != 'pull_request_review'
+      ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
       - uses: actions/setup-go@v5.2.0
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
       - uses: ko-build/setup-ko@v0.7
         env:
           KO_DOCKER_REPO: ko.local

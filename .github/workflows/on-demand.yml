@@ -1,4 +1,3 @@
----
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
 # Copyright (c) 2022
@@ -7,26 +6,20 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
 name: Check Bash scripts
 # yamllint disable-line rule:truthy
 on:
   push:
     paths:
-      - '*.sh'
+      - "*.sh"
   pull_request_review:
     types:
       - submitted
-
 jobs:
   check-format:
     name: Check scripts format
     if: >-
-      (
-        github.event_name == 'pull_request_review' &&
-        github.event.review.state == 'approved'
-      ) ||
-      github.event_name != 'pull_request_review'
+      ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
