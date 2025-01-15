@@ -57,7 +57,7 @@ jobs:
         github.event.review.state == 'approved'
       ) ||
       github.event_name != 'pull_request_review'
-    runs-on: macos-12
+    runs-on: vm-self-hosted
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Cache Vagrant boxes
@@ -71,15 +71,8 @@ jobs:
         shell: bash
         run: |
           if [[ "$(VBoxManage --version)" == "6.1.28r147628" ]]; then
-              find . -type f -iname "Vagrantfile" -exec sed -i '.bak' 's|v.gui = .*|v.gui = true|g' {} \;
-              find . -type f -name "*.bak" -delete
+              find . -type f -iname "Vagrantfile" -exec sed -i 's|v.gui = .*|v.gui = true|g' {} \;
           fi
-      - name: Replace shorten links
-        run: |
-          find . -type f -iname "*sh" -exec sed -i '.bak' 's|http://bit.ly/install_pkg|https://raw.githubusercontent.com/electrocucaracha/pkg-mgr_scripts/master/install.sh|g' {} \;
-          find . -type f -name "*.bak" -delete
-      - name: Install vagrant tool
-        run: brew install vagrant
       - name: Deploy Virtual Machine
         env:
           VAGRANT_DISABLE_VBOXSYMLINKCREATE: 1
