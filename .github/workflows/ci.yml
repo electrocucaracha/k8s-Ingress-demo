@@ -22,7 +22,7 @@ on:
     - cron: "0 0 * * 5"
 jobs:
   check-ci-baremetal:
-    name: Check E2E deployment on Ubuntu Bionic Virtual Environment (contour)
+    name: Check E2E deployment on Ubuntu Jammy Virtual Environment (contour)
     if: >-
       ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: ubuntu-20.04
@@ -43,7 +43,7 @@ jobs:
         working-directory: scripts
         run: ./check.sh
   check-ci-vm:
-    name: Check E2E deployment on Ubuntu Bionic Virtual Machine (nginx)
+    name: Check E2E deployment on Ubuntu Jammy Virtual Machine (nginx)
     if: >-
       ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
     runs-on: vm-self-hosted
