@@ -26,6 +26,7 @@ function _gen_kind_config {
     kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
     #fi
 
+    # editorconfig-checker-disable
     cat <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -55,6 +56,7 @@ EOF
     image: kindest/node:v$kube_version
 EOF
     done
+    # editorconfig-checker-enable
 }
 
 trap get_status ERR

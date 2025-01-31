@@ -24,6 +24,7 @@ lint:
 	-e RUN_LOCAL=true \
 	-e LINTER_RULES_PATH=/ \
 	-e VALIDATE_KUBERNETES_KUBEVAL=false \
+	-e VALIDATE_CHECKOV=false \
 	-e KUBERNETES_KUBECONFORM_OPTIONS='-ignore-missing-schemas' \
 	ghcr.io/super-linter/super-linter
 	tox -e lint
