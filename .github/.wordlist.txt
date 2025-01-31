@@ -6,6 +6,7 @@ https
 img
 initVagrant
 Kubernetes
+laobi
 Libvirt
 linter
 ly

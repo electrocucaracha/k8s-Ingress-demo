@@ -9,7 +9,7 @@
 
 <!-- markdown-link-check-disable-next-line -->
 
-![visitors](https://visitor-badge.glitch.me/badge?page_id=electrocucaracha.k8s-Ingress-demo)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=electrocucaracha.k8s-Ingress-demo)
 
 ## Summary
 
