@@ -44,7 +44,7 @@ es_clusterip=$(kubectl get svc service-es -o jsonpath='{.spec.clusterIP}')
 # Run Assertions
 assert_non_empty "$default_clusterip"
 assert_non_empty "$es_clusterip"
-assert_contains "$(sudo docker exec k8s-worker curl -s "$default_clusterip:9001")" "Hello"
-assert_contains "$(sudo docker exec k8s-worker curl -s "$es_clusterip:9001")" "Hola"
+assert_contains "$(sudo docker exec k8s-control-plane curl -s "$default_clusterip:9001")" "Hello"
+assert_contains "$(sudo docker exec k8s-control-plane curl -s "$es_clusterip:9001")" "Hola"
 assert_contains "$(curl -s "http://$(ip route get 8.8.8.8 | grep "^8." | awk '{ print $7 }')/en")" "Hello"
 assert_contains "$(curl -s "http://$(ip route get 8.8.8.8 | grep "^8." | awk '{ print $7 }')/es")" "Hola"
