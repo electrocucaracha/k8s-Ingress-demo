@@ -31,7 +31,7 @@ jobs:
       - run: ko build demo/main.go --bare
       - name: Scan for vulnerabilities
         id: sec-scan
-        uses: crazy-max/ghaction-container-scan@3e9c23f89cd6b0bda949ffe14f28a3ce282323b7 # 3.0.0
+        uses: crazy-max/ghaction-container-scan@74ce8ef8146e9632a852a8f79744bbcab1a527ee # 3.1.0
         with:
           image: ko.local:latest
           annotations: true
