@@ -27,8 +27,8 @@ func indexHandler(w http.ResponseWriter, _ *http.Request) {
 		panic(err)
 	}
 
-	switch locale := os.Getenv("LOCALE"); {
-	case locale == "es":
+	switch os.Getenv("LOCALE") {
+	case "es":
 		_, err = w.Write([]byte("<h1>Hola CNCF El Salvador desde <b>" + name + "</b> nodo</h1>"))
 	default:
 		_, err = w.Write([]byte("<h1>Hello CNCF El Salvador from <b>" + name + "</b> node</h1>"))
