@@ -22,10 +22,10 @@ on:
     - cron: "0 0 * * 5"
 jobs:
   check-ci-baremetal:
-    name: Check E2E deployment on Ubuntu Jammy Virtual Environment (contour)
+    name: Check E2E deployment on Ubuntu Noble Virtual Environment (contour)
     if: >-
       ( github.event_name == 'pull_request_review' && github.event.review.state == 'approved' ) || github.event_name != 'pull_request_review'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       DEBUG: true
       INGRESS_CONTROLLER: contour
