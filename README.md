@@ -13,32 +13,32 @@
 
 ## Summary
 
-This project was created to demonstrate how to configure and use the
-[Kubernetes Ingress resource][1]. This demo uses [NGINX][2] or [Contour][3] as
-Ingress Controller and the [KinD tool][4] for deploying a multinode Kubernetes
-cluster.
+This project demonstrates how to configure and use the [Kubernetes Ingress resource][1].
+It showcases two different Ingress Controllers: [NGINX][2] and [Contour][3].
+The demo runs on a multi-node Kubernetes cluster deployed using [KinD (Kubernetes in Docker)][4].
 
 ![Dashboard](img/diagram.png)
 
 ## Virtual Machines
 
-The [Vagrant tool][5] can be used for provisioning an Ubuntu Focal
-Virtual Machine. It's highly recommended to use the _setup.sh_ script
-of the [bootstrap-vagrant project][6] for installing Vagrant
-dependencies and plugins required for this project. That script
-supports two Virtualization providers (Libvirt and VirtualBox) which
-are determine by the **PROVIDER** environment variable.
+You can use [Vagrant][5] to provision an Ubuntu Focal virtual machine.
+To simplify the setup, use the _setup.sh_ script provided by the [bootstrap-vagrant project][6].
+This script installs the required Vagrant dependencies and plugins.
+
+It supports two virtualization providers:
+
+- Libvirt
+- VirtualBox
+
+Specify the provider using the **PROVIDER** environment variable. For example:
 
     curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
 
-Once Vagrant is installed, it's possible to provision a Virtual
-Machine using the following instructions:
+Once Vagrant is ready, provision the virtual machine by running:
 
     vagrant up
 
-The provisioning process will take some time to install all
-dependencies required by this project and perform a Kubernetes
-deployment on it.
+> The setup process may take some time as it installs all dependencies and deploys Kubernetes.
 
 ### Environment variables
 
