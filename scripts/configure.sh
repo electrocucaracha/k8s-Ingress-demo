@@ -12,20 +12,20 @@ set -o pipefail
 set -o errexit
 set -o nounset
 if [[ ${DEBUG:-false} == "true" ]]; then
-	set -o xtrace
+    set -o xtrace
 fi
 
 # shellcheck source=scripts/_common.sh
 source _common.sh
 
 function _gen_kind_config {
-	#kube_version="1.23.5"
-	#if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
-	kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
-	#fi
+    #kube_version="1.23.5"
+    #if [ "${INGRESS_CONTROLLER:-nginx}" == "nginx" ]; then
+    kube_version=$(curl -sL https://registry.hub.docker.com/v2/repositories/kindest/node/tags | python -c 'import json,sys,re;versions=[obj["name"][1:] for obj in json.load(sys.stdin)["results"] if re.match("^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$",obj["name"])];print("\n".join(versions))' | uniq | sort -rn | head -n 1)
+    #fi
 
-	# editorconfig-checker-disable
-	cat <<EOF
+    # editorconfig-checker-disable
+    cat <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
@@ -47,7 +47,7 @@ nodes:
         hostPort: 443
         protocol: TCP
 EOF
-	# editorconfig-checker-enable
+    # editorconfig-checker-enable
 }
 
 trap get_status ERR
@@ -57,31 +57,31 @@ export KIND_CLUSTER_NAME=k8s
 
 # Provision a K8s cluster
 if ! sudo "$(command -v kind)" get clusters | grep -e "$KIND_CLUSTER_NAME"; then
-	_gen_kind_config | sudo -E kind create cluster --config=-
-	mkdir -p "$HOME/.kube"
-	sudo chown -R "$USER": "$HOME/.kube"
-	sudo -E kind get kubeconfig | tee "$HOME/.kube/config"
+    _gen_kind_config | sudo -E kind create cluster --config=-
+    mkdir -p "$HOME/.kube"
+    sudo chown -R "$USER": "$HOME/.kube"
+    sudo -E kind get kubeconfig | tee "$HOME/.kube/config"
 fi
 
 # Wait for node readiness
 for node in $(kubectl get node -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'); do
-	kubectl wait --for=condition=ready "node/$node" --timeout=3m
+    kubectl wait --for=condition=ready "node/$node" --timeout=3m
 done
 
 # Deploy Ingress services
 kubectl apply -f "${INGRESS_CONTROLLER:-nginx}.yaml"
 case ${INGRESS_CONTROLLER:-nginx} in
 nginx)
-	kubectl wait --namespace ingress-nginx \
-		--for=condition=ready pod \
-		--selector=app.kubernetes.io/component=controller \
-		--timeout=90s
-	;;
+    kubectl wait --namespace ingress-nginx \
+        --for=condition=ready pod \
+        --selector=app.kubernetes.io/component=controller \
+        --timeout=90s
+    ;;
 contour)
-	kubectl patch daemonsets -n projectcontour envoy \
-		-p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
-	for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
-		kubectl rollout status --namespace projectcontour "$resource" --timeout=3m
-	done
-	;;
+    kubectl patch daemonsets -n projectcontour envoy \
+        -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
+    for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
+        kubectl rollout status --namespace projectcontour "$resource" --timeout=3m
+    done
+    ;;
 esac

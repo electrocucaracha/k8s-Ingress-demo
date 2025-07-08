@@ -12,8 +12,8 @@ set -o pipefail
 set -o errexit
 set -o nounset
 if [[ ${DEBUG:-false} == "true" ]]; then
-	set -o xtrace
-	export PKG_DEBUG=true
+    set -o xtrace
+    export PKG_DEBUG=true
 fi
 
 export PKG_KREW_PLUGINS_LIST=" "

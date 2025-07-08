@@ -12,27 +12,27 @@ set -o pipefail
 set -o errexit
 set -o nounset
 if [[ ${DEBUG:-false} == "true" ]]; then
-	set -o xtrace
+    set -o xtrace
 fi
 
 # shellcheck source=scripts/_common.sh
 source _common.sh
 
 function assert_contains {
-	local input=$1
-	local expected=$2
+    local input=$1
+    local expected=$2
 
-	if ! echo "$input" | grep -q "$expected"; then
-		error "Got $input expected $expected"
-	fi
+    if ! echo "$input" | grep -q "$expected"; then
+        error "Got $input expected $expected"
+    fi
 }
 
 function assert_non_empty {
-	local input=$1
+    local input=$1
 
-	if [ -z "$input" ]; then
-		error "Empty input value"
-	fi
+    if [ -z "$input" ]; then
+        error "Empty input value"
+    fi
 }
 
 trap "kubectl delete -f ../deployments" EXIT
