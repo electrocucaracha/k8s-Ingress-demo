@@ -30,6 +30,7 @@ jobs:
           VALIDATE_KUBERNETES_KUBEVAL: false
           VALIDATE_CHECKOV: false
           KUBERNETES_KUBECONFORM_OPTIONS: "-ignore-missing-schemas"
+          DEFAULT_BRANCH: ${{ github.head_ref || github.ref_name }}
   check-tox:
     name: Check syntax (tox)
     runs-on: ubuntu-latest
