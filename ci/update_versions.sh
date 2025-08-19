@@ -23,7 +23,9 @@ wget -O scripts/contour.yaml https://projectcontour.io/quickstart/contour.yaml
 if command -v go >/dev/null; then
     rm go.*
     go mod init github.com/electrocucaracha/k8s-Ingress-demo
-    go mod tidy -go="$(curl -sL https://golang.org/VERSION?m=text | sed -n 's/go//;s/\..$//;1p')"
+    go_version="$(curl -sL https://golang.org/VERSION?m=text | sed -n 's/go//;s/\..$//;1p')"
+    go mod tidy -go="$go_version"
+    sed -i "s/go-version: .*/go-version: \"^$go_version\"/g" .github/workflows/update.yml
 fi
 
 # Update GitHub Action commit hashes
