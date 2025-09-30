@@ -24,7 +24,9 @@ if command -v go >/dev/null; then
     rm go.*
     go mod init github.com/electrocucaracha/k8s-Ingress-demo
     go_version="$(curl -sL https://golang.org/VERSION?m=text | sed -n 's/go//;s/\..$//;1p')"
-    go mod tidy -go="$go_version"
+    go install "golang.org/dl/go${go_version}.0@latest"
+    "$HOME/go/bin/go${go_version}.0" download
+    "$HOME/go/bin/go${go_version}.0" mod tidy -go="$go_version"
     sed -i "s/go-version: .*/go-version: \"^$go_version\"/g" .github/workflows/update.yml
 fi
 
