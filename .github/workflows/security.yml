@@ -26,6 +26,6 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # 5.0.0
       - name: Run Gosec Security Scanner
-        uses: securego/gosec@01c866a8a663c1498809c7feb41308f76a09afd9 # 2.22.8
+        uses: securego/gosec@20fa87a15a2f9e28cb4adc2fe269bb3232ec45e4 # 2.22.9
         with:
           args: ./...
