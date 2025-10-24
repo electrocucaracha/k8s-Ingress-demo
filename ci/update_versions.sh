@@ -18,7 +18,7 @@ fi
 trap "make fmt" EXIT
 
 wget -O scripts/nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-wget -O scripts/contour.yaml https://projectcontour.io/quickstart/contour.yaml
+wget -O scripts/contour.yaml https://raw.githubusercontent.com/projectcontour/contour/refs/heads/main/examples/render/contour.yaml
 
 if command -v go >/dev/null; then
     rm go.*
