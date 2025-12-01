@@ -1,3 +1,4 @@
+---
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
 # Copyright (c) 2020
@@ -9,5 +10,5 @@
 formatter:
   type: basic
   include_document_start: true
-  pad_line_comments: 2
+  pad_line_comments: 1
   max_line_length: 160

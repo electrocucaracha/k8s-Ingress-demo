@@ -23,19 +23,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # 6.0.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # 6.0.0
         with:
           persist-credentials: false
-      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c  # 6.1.0
+      - uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # 6.1.0
         with:
           go-version-file: "go.mod"
-      - uses: ko-build/setup-ko@d006021bd0c28d1ce33a07e7943d48b079944c8d  # 0.9
+      - uses: ko-build/setup-ko@d006021bd0c28d1ce33a07e7943d48b079944c8d # 0.9
         env:
           KO_DOCKER_REPO: ko.local
       - run: ko build demo/main.go --bare
       - name: Scan for vulnerabilities
         id: sec-scan
-        uses: crazy-max/ghaction-container-scan@4d8e0acba576e46016cbd65b9ecfc604e85e3990  # 3.2.0
+        uses: crazy-max/ghaction-container-scan@4d8e0acba576e46016cbd65b9ecfc604e85e3990 # 3.2.0
         with:
           image: ko.local:latest
           annotations: true

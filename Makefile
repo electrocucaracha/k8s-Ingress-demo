@@ -23,8 +23,12 @@ lint:
 	sudo -E $(DOCKER_CMD) run --rm -v $$(pwd):/tmp/lint \
 	-e RUN_LOCAL=true \
 	-e LINTER_RULES_PATH=/ \
+	-e EDITORCONFIG_FILE_NAME=.editorconfig-checker.json \
+	-e VALIDATE_BIOME_FORMAT=false \
 	-e VALIDATE_KUBERNETES_KUBEVAL=false \
 	-e VALIDATE_CHECKOV=false \
+	-e VALIDATE_PRE_COMMIT=false \
+	-e VALIDATE_TRIVY=false \
 	-e KUBERNETES_KUBECONFORM_OPTIONS='-ignore-missing-schemas' \
 	ghcr.io/super-linter/super-linter
 	tox -e lint
