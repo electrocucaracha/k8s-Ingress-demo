@@ -23,7 +23,7 @@ jobs:
     name: Check spelling (reviewdog)
     runs-on: ubuntu-latest
     permissions:
-      contents: rea
+      contents: read
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # 6.0.0
         with:
@@ -35,7 +35,7 @@ jobs:
     name: Check spelling (pyspelling)
     runs-on: ubuntu-latest
     permissions:
-      contents: rea
+      contents: read
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # 6.0.0
         with:
