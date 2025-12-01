@@ -1,3 +1,4 @@
+---
 # This file is generated from the individual YAML files by generate-deployment.sh. Do not
 # edit this file directly but instead edit the source files and re-render.
 #
@@ -221,7 +222,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   name: contourconfigurations.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: ContourConfiguration
@@ -1580,7 +1580,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   name: contourdeployments.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: ContourDeployment
@@ -2123,7 +2122,8 @@ spec:
                                   Ex. "ext4", "xfs", "ntfs". Implicitly inferred to be "ext4" if unspecified.
                                 type: string
                               kind:
-                                description: "kind expected values are Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account  Managed: azure managed data disk (only in managed availability set). defaults to shared"
+                                description: "kind expected values are Shared: multiple blob disks per storage account  Dedicated: single blob disk per storage account
+                                  \ Managed: azure managed data disk (only in managed availability set). defaults to shared"
                                 type: string
                               readOnly:
                                 default: false
@@ -2409,7 +2409,8 @@ spec:
                                       format: int32
                                       type: integer
                                     path:
-                                      description: "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+                                      description: "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..'
+                                        path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
                                       type: string
                                     resourceFieldRef:
                                       description: |-
@@ -3309,7 +3310,8 @@ spec:
                                                 format: int32
                                                 type: integer
                                               path:
-                                                description: "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
+                                                description: "Required: Path is  the relative path name of the file to be created. Must not be absolute or contain
+                                                  the '..' path. Must be utf-8 encoded. The first item of the relative path must not start with '..'"
                                                 type: string
                                               resourceFieldRef:
                                                 description: |-
@@ -5250,7 +5252,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   name: extensionservices.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: ExtensionService
@@ -5718,7 +5719,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   name: httpproxies.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: HTTPProxy
@@ -8500,7 +8500,6 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.19.0
   name: tlscertificatedelegations.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: TLSCertificateDelegation
@@ -8812,9 +8811,10 @@ rules:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: contour-certgen-v1-33-0
+  name: contour-certgen-main
   namespace: projectcontour
 spec:
+  ttlSecondsAfterFinished: 0
   template:
     metadata:
       labels:
@@ -8822,8 +8822,8 @@ spec:
     spec:
       containers:
         - name: contour
-          image: ghcr.io/projectcontour/contour:v1.33.0
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/projectcontour/contour:main
+          imagePullPolicy: Always
           command:
             - contour
             - certgen
@@ -9076,8 +9076,8 @@ spec:
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
           command: ["contour"]
-          image: ghcr.io/projectcontour/contour:v1.33.0
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/projectcontour/contour:main
+          imagePullPolicy: Always
           name: contour
           ports:
             - containerPort: 8001
@@ -9159,8 +9159,8 @@ spec:
           args:
             - envoy
             - shutdown-manager
-          image: ghcr.io/projectcontour/contour:v1.33.0
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/projectcontour/contour:main
+          imagePullPolicy: Always
           lifecycle:
             preStop:
               exec:
@@ -9180,7 +9180,7 @@ spec:
             - --log-level info
           command:
             - envoy
-          image: docker.io/envoyproxy/envoy:distroless-v1.35.2
+          image: docker.io/envoyproxy/envoy:distroless-v1.35.6
           imagePullPolicy: IfNotPresent
           name: envoy
           env:
@@ -9241,8 +9241,8 @@ spec:
             - --envoy-key-file=/certs/tls.key
           command:
             - contour
-          image: ghcr.io/projectcontour/contour:v1.33.0
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/projectcontour/contour:main
+          imagePullPolicy: Always
           name: envoy-initconfig
           volumeMounts:
             - name: envoy-config

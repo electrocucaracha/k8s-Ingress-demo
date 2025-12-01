@@ -1,3 +1,4 @@
+---
 # SPDX-license-identifier: Apache-2.0
 ##############################################################################
 # Copyright (c) 2021
@@ -18,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the latest code
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # 5.0.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # 6.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       - name: Automatic Rebase
-        uses: cirrus-actions/rebase@b87d48154a87a85666003575337e27b8cd65f691 # 1.8
+        uses: cirrus-actions/rebase@b87d48154a87a85666003575337e27b8cd65f691  # 1.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
