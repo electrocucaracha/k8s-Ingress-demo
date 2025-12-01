@@ -30,6 +30,11 @@ if command -v go >/dev/null; then
     sed -i "s/go-version: .*/go-version: \"^$go_version\"/g" .github/workflows/update.yml
 fi
 
+if ! command -v uvx >/dev/null; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+uvx pre-commit autoupdate
+
 # Update GitHub Action commit hashes
 gh_actions=$(grep -r "uses: [a-zA-Z\-]*/[\_a-z\-]*@" .github/ | sed 's/@.*//' | awk -F ': ' '{ print $3 }' | sort -u)
 for action in $gh_actions; do
