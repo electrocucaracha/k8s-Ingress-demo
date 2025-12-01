@@ -16,6 +16,7 @@ on:
   pull_request_review:
     types:
       - submitted
+permissions: read-all
 jobs:
   check-sec:
     name: Check source code vulnerabilities
@@ -26,6 +27,8 @@ jobs:
       GO111MODULE: "on"
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # 6.0.0
+        with:
+          persist-credentials: false
       - name: Run Gosec Security Scanner
         uses: securego/gosec@bfec35a303e24e2a929b586822eca8486accc670  # 2.22.10
         with:
