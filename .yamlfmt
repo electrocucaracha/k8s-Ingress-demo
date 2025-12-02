@@ -11,4 +11,4 @@ formatter:
   type: basic
   include_document_start: true
   pad_line_comments: 1
-  eof_newline: false
+  eof_newline: true
