@@ -33,24 +33,19 @@ networking:
 nodes:
   - role: control-plane
     image: kindest/node:v$kube_version
-    kubeadmConfigPatches:
-      - |
-        kind: InitConfiguration
-        nodeRegistration:
-          kubeletExtraArgs:
-            node-labels: "ingress-ready=true"
-    extraPortMappings:
-      - containerPort: 80
-        hostPort: 80
-        protocol: TCP
-      - containerPort: 443
-        hostPort: 443
-        protocol: TCP
+  - role: worker
+    image: kindest/node:v$kube_version
+  - role: worker
+    image: kindest/node:v$kube_version
+  - role: worker
+    image: kindest/node:v$kube_version
 EOF
     # editorconfig-checker-enable
 }
 
 trap get_status ERR
+
+sudo docker compose up -d
 
 # NOTE: this env var is used by kind and ko tools
 export KIND_CLUSTER_NAME=k8s

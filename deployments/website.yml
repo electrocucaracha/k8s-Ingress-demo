@@ -57,7 +57,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 9001
       targetPort: 3000
@@ -71,7 +71,7 @@ metadata:
   labels:
     app: frontend-es
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 9001
       targetPort: 3000
