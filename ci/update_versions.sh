@@ -17,17 +17,55 @@ fi
 
 trap "make fmt" EXIT
 
+function get_version {
+    local type="$1"
+    local name="$2"
+    local version=""
+    local attempt_counter=0
+    readonly max_attempts=5
+
+    until [ "$version" ]; do
+        version=$("_get_latest_$type" "$name")
+        if [ "$version" ]; then
+            break
+        elif [ ${attempt_counter} -eq ${max_attempts} ]; then
+            echo "Max attempts reached"
+            exit 1
+        fi
+        attempt_counter=$((attempt_counter + 1))
+        sleep $((attempt_counter * 2))
+    done
+
+    echo "${version#v}"
+}
+
+function _get_latest_github_release {
+    url_effective=$(curl -sL -o /dev/null -w '%{url_effective}' "https://github.com/$1/releases/latest")
+    if [ "$url_effective" ]; then
+        echo "${url_effective##*/}"
+    fi
+}
+
+sed -i "s/cloud-provider-kind@.*/cloud-provider-kind@v$(get_version github_release kubernetes-sigs/cloud-provider-kind)/" scripts/cloud-provider-kind/Dockerfile
+
 wget -O scripts/nginx.yaml https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 wget -O scripts/contour.yaml https://raw.githubusercontent.com/projectcontour/contour/refs/heads/main/examples/render/contour.yaml
 
 if command -v go >/dev/null; then
-    rm go.*
-    go mod init github.com/electrocucaracha/k8s-Ingress-demo
     go_version="$(curl -sL https://golang.org/VERSION?m=text | sed -n 's/go//;s/\..$//;1p')"
     go install "golang.org/dl/go${go_version}.0@latest"
-    "$HOME/go/bin/go${go_version}.0" download
-    "$HOME/go/bin/go${go_version}.0" mod tidy -go="$go_version"
-    sed -i "s/go-version: .*/go-version: \"^$go_version\"/g" .github/workflows/update.yml
+    go get -u ./... || true
+    go mod tidy -go="$go_version"
+    find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) \
+        -exec grep -l 'go-version:' {} + \
+        -exec env go_version="${go_version}" bash -s {} + <<'EOF'
+    for file; do
+        sed -i \
+            "s|^\([[:space:]]*go-version:[[:space:]]*\).*|\
+\1\"^${go_version}\"|" \
+            "${file}"
+    done
+EOF
 fi
 
 if ! command -v uvx >/dev/null; then
