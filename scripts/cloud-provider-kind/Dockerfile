@@ -2,7 +2,7 @@ FROM golang:1.24 as build
 ENV GOBIN /tmp
 ENV GO111MODULE on
 ENV CGO_ENABLED 0
-RUN go install sigs.k8s.io/cloud-provider-kind@latest
+RUN go install sigs.k8s.io/cloud-provider-kind@v0.10.0
 
 FROM docker:29.0-dind
 COPY --from=build --chown=root:root /tmp/cloud-provider-kind /bin/cloud-provider-kind
