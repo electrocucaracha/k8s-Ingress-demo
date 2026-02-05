@@ -20,7 +20,7 @@ on:
     types:
       - submitted
   schedule:
-    - cron: "0 0 * * 5"
+    - cron: "0 0 * * 1"
 permissions: read-all
 jobs:
   check-ci-baremetal:
