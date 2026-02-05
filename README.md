@@ -11,41 +11,56 @@
 
 ![visitors](https://visitor-badge.laobi.icu/badge?page_id=electrocucaracha.k8s-Ingress-demo)
 
-## Summary
+## Overview
 
-This project demonstrates how to configure and use the [Kubernetes Ingress resource][1].
-It showcases two different Ingress Controllers: [NGINX][2] and [Contour][3].
-The demo runs on a multi-node Kubernetes cluster deployed using [KinD (Kubernetes in Docker)][4].
+This project is a didactic demonstration of how to configure and use the Kubernetes Ingress resource.
+It compares two different Ingress Controllers:
 
-![Dashboard](img/diagram.png)
+- [Ingress-Nginx Controller][2]
+- [Contour][3]
 
-## Virtual Machines
+The demo runs on a multi-node Kubernetes cluster deployed with [KinD][4] (Kubernetes in Docker).
+Its primary goal is to provide a simple and reproducible environment for learning, testing, and experimenting
+with Ingress behavior across different providers.The demo runs on a multi-node Kubernetes cluster deployed
+with KinD (Kubernetes in Docker)
 
-You can use [Vagrant][5] to provision an Ubuntu Focal virtual machine.
-To simplify the setup, use the _setup.sh_ script provided by the [bootstrap-vagrant project][6].
-This script installs the required Vagrant dependencies and plugins.
+![Architecture](img/diagram.png)
 
-It supports two virtualization providers:
+## Virtual Machines Setup
+
+The project can be executed inside a virtual machine provisioned with [Vagrant][5].
+An Ubuntu Focal environment is recommended.
+
+To simplify the setup, the setup.sh script from the [bootstrap-vagrant project][6] can be used.
+This script installs all required Vagrant dependencies and plugins automatically.
+
+### Supported virtualization providers
+
+The following providers are supported:
 
 - Libvirt
 - VirtualBox
 
-Specify the provider using the **PROVIDER** environment variable. For example:
+Select the provider by setting the **PROVIDER** environment variable. For example:
 
     curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
 
-Once Vagrant is ready, provision the virtual machine by running:
+Once the environment is prepared, provision the virtual machine by running:
 
     vagrant up
 
-> The setup process may take some time as it installs all dependencies and deploys Kubernetes.
+> Note: The provisioning process may take several minutes, as it installs dependencies and deploys the Kubernetes cluster.
+
+## Configuration
 
 ### Environment variables
 
-| Name               | Description                                                |
-| :----------------- | :--------------------------------------------------------- |
-| DEBUG              | Enable verbose output during the execution.(Boolean value) |
-| INGRESS_CONTROLLER | Determine the Ingress Controller to be used.(String value) |
+The behavior of the demo can be customized using the following environment variables:
+
+| Name               | Description                                                      |
+| :----------------- | :--------------------------------------------------------------- |
+| DEBUG              | Enable verbose output during execution (Boolean).                |
+| INGRESS_CONTROLLER | Select the Ingress Controller to use (String: nginx or contour). |
 
 [1]: https://kubernetes.io/docs/concepts/services-networking/ingress/
 [2]: https://kubernetes.github.io/ingress-nginx/
