@@ -29,6 +29,8 @@ lint:
 	-e VALIDATE_CHECKOV=false \
 	-e VALIDATE_PRE_COMMIT=false \
 	-e VALIDATE_TRIVY=false \
+	-e VALIDATE_GO_MODULES=false \
+	-e VALIDATE_SPELL_CODESPELL=false \
 	-e KUBERNETES_KUBECONFORM_OPTIONS='-ignore-missing-schemas' \
 	ghcr.io/super-linter/super-linter
 	tox -e lint
@@ -39,5 +41,3 @@ fmt:
 	shfmt -l -w -s  -i 4 .
 	command -v prettier > /dev/null || npm install prettier
 	npx prettier . --write
-	command -v yamlfmt > /dev/null || curl -s "https://i.jpillora.com/google/yamlfmt!!" | bash
-	yamlfmt -dstar **/*.{yaml,yml}

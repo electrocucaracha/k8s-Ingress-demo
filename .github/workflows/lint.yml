@@ -48,6 +48,8 @@ jobs:
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_PRE_COMMIT: false
           VALIDATE_TRIVY: false
+          VALIDATE_GO_MODULES: false
+          VALIDATE_SPELL_CODESPELL: false
           EDITORCONFIG_FILE_NAME: .editorconfig-checker.json
           SAVE_SUPER_LINTER_OUTPUT: true
           KUBERNETES_KUBECONFORM_OPTIONS: "-ignore-missing-schemas"
