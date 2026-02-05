@@ -13,7 +13,7 @@
 
 ## Overview
 
-This project is a didactic demonstration of how to configure and use the Kubernetes Ingress resource.
+This project is a didactic demonstration of how to configure and use the [Kubernetes Ingress resource][1].
 It compares two different Ingress Controllers:
 
 - [Ingress-Nginx Controller][2]
@@ -43,11 +43,15 @@ The following providers are supported:
 
 Select the provider by setting the **PROVIDER** environment variable. For example:
 
-    curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
+```bash
+curl -fsSL http://bit.ly/initVagrant | PROVIDER=libvirt bash
+```
 
 Once the environment is prepared, provision the virtual machine by running:
 
-    vagrant up
+```bash
+vagrant up
+```
 
 > Note: The provisioning process may take several minutes, as it installs dependencies and deploys the Kubernetes cluster.
 
