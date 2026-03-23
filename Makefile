@@ -37,7 +37,7 @@ lint:
 
 .PHONY: fmt
 fmt:
-	command -v shfmt > /dev/null || curl -s "https://i.jpillora.com/mvdan/sh!!?as=shfmt" | bash
+	command -v shfmt > /dev/null || go install mvdan.cc/sh/v3/cmd/shfmt@latest
 	shfmt -l -w -s  -i 4 .
 	command -v prettier > /dev/null || npm install prettier
 	npx prettier . --write
