@@ -61,7 +61,7 @@ if command -v go >/dev/null; then
         -exec env go_version="${go_version}" bash -s {} + <<'EOF'
     for file; do
         sed -i \
-            "s|^\([[:space:]]*go-version:[[:space:]]*\).*|\
+            "s|^\([[:space:]]*go-version:[[:space:]]*\)\"\^[^\"]*\"|\
 \1\"^${go_version}\"|" \
             "${file}"
     done
