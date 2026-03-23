@@ -8,6 +8,7 @@
 ##############################################################################
 
 DOCKER_CMD ?= $(shell which docker 2> /dev/null || which podman 2> /dev/null || echo docker)
+SHFMT ?= $(shell command -v shfmt 2>/dev/null || echo "$(shell go env GOPATH)/bin/shfmt")
 
 run-local:
 	go run demo/main.go
@@ -38,6 +39,6 @@ lint:
 .PHONY: fmt
 fmt:
 	command -v shfmt > /dev/null || go install mvdan.cc/sh/v3/cmd/shfmt@latest
-	shfmt -l -w -s  -i 4 .
+	$(SHFMT) -l -w -s  -i 4 .
 	command -v prettier > /dev/null || npm install prettier
 	npx prettier . --write
