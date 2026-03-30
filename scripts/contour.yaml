@@ -222,7 +222,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: contourconfigurations.projectcontour.io
 spec:
   group: projectcontour.io
@@ -1665,7 +1665,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: contourdeployments.projectcontour.io
 spec:
   group: projectcontour.io
@@ -1841,9 +1841,10 @@ spec:
                               operator:
                                 description: |-
                                   Operator represents a key's relationship to the value.
-                                  Valid operators are Exists and Equal. Defaults to Equal.
+                                  Valid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.
                                   Exists is equivalent to wildcard for value, so that a pod can
                                   tolerate all taints of a particular category.
+                                  Lt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).
                                 type: string
                               tolerationSeconds:
                                 description: |-
@@ -2774,7 +2775,7 @@ spec:
                                       resources:
                                         description: |-
                                           resources represents the minimum resources the volume should have.
-                                          If RecoverVolumeExpansionFailure feature is enabled users are allowed to specify resource requirements
+                                          Users are allowed to specify resource requirements
                                           that are lower than previous value but must still be higher than capacity recorded in the
                                           status field of the claim.
                                           More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources
@@ -3669,6 +3670,21 @@ spec:
                                             Kubelet's generated CSRs will
                                             be addressed to this signer.
                                           type: string
+                                        userAnnotations:
+                                          additionalProperties:
+                                            type: string
+                                          description: |-
+                                            userAnnotations allow pod authors to pass additional information to
+                                            the signer implementation.  Kubernetes does not restrict or validate this
+                                            metadata in any way.
+                                            These values are copied verbatim into the `spec.unverifiedUserAnnotations` field of
+                                            the PodCertificateRequest objects that Kubelet creates.
+                                            Entries are subject to the same validation as object metadata annotations,
+                                            with the addition that all keys must be domain-prefixed. No restrictions
+                                            are placed on values, except an overall size limitation on the entire field.
+                                            Signers should document the keys and values they support. Signers should
+                                            deny requests that contain keys they do not recognize.
+                                          type: object
                                       required:
                                         - keyType
                                         - signerName
@@ -4205,9 +4221,10 @@ spec:
                               operator:
                                 description: |-
                                   Operator represents a key's relationship to the value.
-                                  Valid operators are Exists and Equal. Defaults to Equal.
+                                  Valid operators are Exists, Equal, Lt, and Gt. Defaults to Equal.
                                   Exists is equivalent to wildcard for value, so that a pod can
                                   tolerate all taints of a particular category.
+                                  Lt and Gt perform numeric comparisons (requires feature gate TaintTolerationComparisonOperators).
                                 type: string
                               tolerationSeconds:
                                 description: |-
@@ -5617,7 +5634,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: extensionservices.projectcontour.io
 spec:
   group: projectcontour.io
@@ -6107,7 +6124,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: httpproxies.projectcontour.io
 spec:
   group: projectcontour.io
@@ -9124,7 +9141,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: tlscertificatedelegations.projectcontour.io
 spec:
   group: projectcontour.io
@@ -9818,7 +9835,7 @@ spec:
             - --log-level info
           command:
             - envoy
-          image: docker.io/envoyproxy/envoy:distroless-v1.35.8
+          image: docker.io/envoyproxy/envoy:distroless-v1.37.1
           imagePullPolicy: IfNotPresent
           name: envoy
           env:
@@ -9842,7 +9859,6 @@ spec:
               name: https
               protocol: TCP
             - containerPort: 8002
-              hostPort: 8002
               name: metrics
               protocol: TCP
           readinessProbe:
