@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # 6.0.2
         with:
           persist-credentials: false
-      - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # 6.2.0
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # 6.4.0
         with:
           go-version-file: "go.mod"
       - uses: ko-build/setup-ko@d006021bd0c28d1ce33a07e7943d48b079944c8d # 0.9
@@ -35,7 +35,7 @@ jobs:
       - run: ko build demo/main.go --bare
       - name: Scan for vulnerabilities
         id: sec-scan
-        uses: crazy-max/ghaction-container-scan@4d8e0acba576e46016cbd65b9ecfc604e85e3990 # 3.2.0
+        uses: crazy-max/ghaction-container-scan@a0a3900b79d158c85ccf034e5368fae620a9233a # 4.0.0
         with:
           image: ko.local:latest
           annotations: true
