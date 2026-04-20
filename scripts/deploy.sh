@@ -39,3 +39,13 @@ EONG
 
 kubectl rollout status deployment/deployment-es --timeout=3m
 kubectl rollout status deployment/deployment-default --timeout=3m
+
+timeout=180
+until kubectl get ingress website-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null | grep -q .; do
+    timeout=$((timeout - 5))
+    if [ $timeout -le 0 ]; then
+        echo "Timed out waiting for ingress IP"
+        exit 1
+    fi
+    sleep 5
+done
