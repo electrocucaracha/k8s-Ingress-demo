@@ -73,6 +73,7 @@ nginx)
         --timeout=90s
     ;;
 contour)
+    kubectl label nodes --selector='!node-role.kubernetes.io/control-plane' ingress-ready=true
     kubectl patch daemonsets -n projectcontour envoy \
         -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'
     for resource in $(kubectl get deployment,daemonset -n projectcontour --no-headers | awk '{ print $1}'); do
