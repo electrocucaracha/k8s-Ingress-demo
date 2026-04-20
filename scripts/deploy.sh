@@ -28,11 +28,12 @@ function _print_stats {
 
 trap _print_stats ERR
 
+export INGRESS_CONTROLLER="${INGRESS_CONTROLLER:-nginx}"
 newgrp docker <<EONG
 # shellcheck disable=SC1091
 [ -f /etc/profile.d/path.sh ] && source /etc/profile.d/path.sh
 pushd .. >/dev/null
-KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f deployments/website.yml
+envsubst '${INGRESS_CONTROLLER}' < deployments/website.yml | KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f -
 popd >/dev/null
 EONG
 
