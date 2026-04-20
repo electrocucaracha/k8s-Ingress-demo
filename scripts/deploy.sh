@@ -33,7 +33,7 @@ newgrp docker <<EONG
 # shellcheck disable=SC1091
 [ -f /etc/profile.d/path.sh ] && source /etc/profile.d/path.sh
 pushd .. >/dev/null
-envsubst '${INGRESS_CONTROLLER}' < deployments/website.yml | KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f -
+envsubst '\${INGRESS_CONTROLLER}' < deployments/website.yml | KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f -
 popd >/dev/null
 EONG
 
