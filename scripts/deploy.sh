@@ -28,13 +28,24 @@ function _print_stats {
 
 trap _print_stats ERR
 
+export INGRESS_CONTROLLER="${INGRESS_CONTROLLER:-nginx}"
 newgrp docker <<EONG
 # shellcheck disable=SC1091
 [ -f /etc/profile.d/path.sh ] && source /etc/profile.d/path.sh
 pushd .. >/dev/null
-KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f deployments/website.yml
+envsubst '\${INGRESS_CONTROLLER}' < deployments/website.yml | KIND_CLUSTER_NAME=k8s KO_DOCKER_REPO=kind.local ~/go/bin/ko apply -f -
 popd >/dev/null
 EONG
 
 kubectl rollout status deployment/deployment-es --timeout=3m
 kubectl rollout status deployment/deployment-default --timeout=3m
+
+timeout=180
+until kubectl get ingress website-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null | grep -q .; do
+    timeout=$((timeout - 5))
+    if [ $timeout -le 0 ]; then
+        echo "Timed out waiting for ingress IP"
+        exit 1
+    fi
+    sleep 5
+done

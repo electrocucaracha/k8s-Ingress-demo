@@ -83,6 +83,7 @@ kind: Ingress
 metadata:
   name: website-ingress
 spec:
+  ingressClassName: ${INGRESS_CONTROLLER}
   rules:
     - http:
         paths:
